@@ -63,7 +63,7 @@ let () =
   let port =
     match Sys.getenv_opt "PORT" with
     | Some port -> int_of_string port
-    | None -> 8080
+    | None -> 31234
   in
   let host =
     match Sys.getenv_opt "HOST" with
