@@ -1,0 +1,7 @@
+(executable
+ (name sidecar)
+ (package tezos-sidecar)
+ (public_name tezos_sidecar.exe)
+ (libraries piaf yojson)
+ (preprocess
+  (pps ppx_let)))
