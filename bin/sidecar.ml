@@ -14,7 +14,7 @@ let create_handler tezos_uri socket =
     match request.target, request.meth with
     | "/healthz", `GET ->
       let* is_bootstrapped =
-        request_uri (tezos_uri ^ "chains/main/is_bootstrapped")
+        request_uri (tezos_uri ^ "/chains/main/is_bootstrapped")
       in
       let response =
         match is_bootstrapped with
@@ -68,7 +68,7 @@ let () =
   let host =
     match Sys.getenv_opt "HOST" with
     | Some host -> host
-    | None -> "127.0.0.1"
+    | None -> "0.0.0.0"
   in
   let tezos_uri =
     match Sys.getenv_opt "TEZOS_URI" with
