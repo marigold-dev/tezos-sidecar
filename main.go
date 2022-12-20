@@ -34,13 +34,16 @@ func main() {
 			return
 		}
 
-		if level.Level < lastBlock.Level && level.Timestamp.Sub(time.Now()) < (5*time.Minute) {
-			w.WriteHeader(http.StatusInternalServerError)
+		// If the new level is greater than the last level
+		// or the timestamp is less than 5 minutes ago
+		// return 200
+		if level.Level >= lastBlock.Level || level.Timestamp.Sub(time.Now()) <= (5*time.Minute) {
+			lastBlock = *level
+			w.WriteHeader(http.StatusOK)
 			return
 		}
 
-		lastBlock = *level
-		w.WriteHeader(http.StatusOK)
+		w.WriteHeader(http.StatusInternalServerError)
 	})
 
 	err := http.ListenAndServe(addr, nil)
