@@ -24,7 +24,7 @@ var lastBlock BlockSnapshot = BlockSnapshot{Level: 0, Timestamp: time.Now()}
 
 func main() {
 	addr := env.GetDefault("ADDR", ":31234")
-	tezosURI := env.GetDefault("TEZOS_URI", "https://kathmandunet.tezos.marigold.dev")
+	tezosURI := env.GetDefault("TEZOS_URI", "https://mainnet.tezos.marigold.dev")
 
 	// Health endpoint
 	http.HandleFunc("/healthz", func(w http.ResponseWriter, r *http.Request) {
@@ -37,7 +37,7 @@ func main() {
 		// If the new level is greater than the last level
 		// or the timestamp is less than 5 minutes ago
 		// return 200
-		if level.Level >= lastBlock.Level || level.Timestamp.Sub(time.Now()) <= (5*time.Minute) {
+		if level.Level > lastBlock.Level || level.Timestamp.Sub(time.Now()) <= (5*time.Minute) {
 			lastBlock = *level
 			w.WriteHeader(http.StatusOK)
 			return
