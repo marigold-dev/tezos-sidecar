@@ -2,7 +2,7 @@ package main
 
 import (
 	"encoding/json"
-	"io/ioutil"
+	"io"
 	"log"
 	"net/http"
 	"time"
@@ -26,6 +26,7 @@ func main() {
 	addr := env.GetDefault("ADDR", ":31234")
 	minutes := env.GetIntDefault("MINUTES", 5)
 	tezosURI := env.GetDefault("TEZOS_URI", "https://mainnet.tezos.marigold.dev")
+	log.Printf("Listening on %s\n", addr)
 
 	// Health endpoint
 	http.HandleFunc("/healthz", func(w http.ResponseWriter, r *http.Request) {
@@ -59,7 +60,7 @@ func request(tezosURI string) (*BlockSnapshot, error) {
 		return nil, err
 	}
 
-	body, err := ioutil.ReadAll(resp.Body)
+	body, err := io.ReadAll(resp.Body)
 	if err != nil {
 		return nil, err
 	}
@@ -68,6 +69,6 @@ func request(tezosURI string) (*BlockSnapshot, error) {
 	json.Unmarshal(body, &block)
 
 	log.Printf("Level: %d, Timestamp: %s", block.Level, block.Timestamp)
-	result := &BlockSnapshot{Level: block.Level, Timestamp: time.Now()}
+	result := &BlockSnapshot{Level: block.Level, Timestamp: block.Timestamp}
 	return result, nil
 }
